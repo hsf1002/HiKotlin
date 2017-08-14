@@ -368,7 +368,7 @@ interface IBox :Box{
 继承是一个 “是不是”的关系，而 接口 实现则是 “有没有”的关系；抽象类作为很多子类的父类，它是一种模板式设计，而接口是一种行为规范，它是一种辐射式设计；对于抽象类，如果需要添加新的方法，可以直接在抽象类中添加具体的实现，子类可以不进行变更；而对于接口则不行，如果接口进行了变更，则所有实现这个接口的类都必须进行相应的改动  
 
 ## 继承  
-以“:”操作符，完成子类继承父类；在官方文档上Any类是所有Kotlin文件的根，所有的类均继承于Any类；创建一个类时，若未声明父类，会隐式的继承于Any；Any类并不是Java.lang.Object类，其仅有equals(other: Any?)、 hashCode()、toString()等三个方法，并没有任何其他成员属性；在kotlin中， 实现继承通常遵循如下规则：如果一个类从它的直接父类继承了同一个函数的多个实现，那么它必须重写这个函数并且提供自己的实现(或许只是直接用了继承来的实现) 为表示使用父类中提供的方法我们用 super 表示，子类构造函数要么单独初始化父类成员变量，要么调用super；  
+以“:”操作符，完成子类继承父类；在官方文档上Any类是所有Kotlin文件的根，所有的类均继承于Any类；创建一个类时，若未声明父类，会隐式的继承于Any；Any类并不是Java.lang.Object类，其仅有equals(other: Any?)、 hashCode()、toString()等三个方法，并没有任何其他成员属性；在kotlin中， 实现继承通常遵循如下规则：如果一个类从它的直接父类继承了同一个函数的多个实现，那么它必须重写这个函数并且提供自己的实现(或许只是直接用了继承来的实现) 为表示使用父类中提供的方法我们用 super 表示，子类构造函数要么单独初始化父类成员变量，要么调用super  
 ```
 open class A {
     open fun f () { print("A") }
@@ -459,9 +459,9 @@ data class Book(var name:String, var page:Int, var anthor:String){
 其对象以线性方式存储，有序，可重复；与set一样，Kotlin并没有提供创建List的函数，如果想创建一个List，可以调用标准库中的方法，listOf() , mutableListOf()。listOf()是使用ArrayList实现的，返回的list是只读的，其内存效率更高。在开发过程中，可以尽可能的多用只读List，可以在一定程度上提高内存效率  
 
 ## 集合-Map  
-是一种把键对象和值对象映射的集合，它的每一个元素都包含一对键对象和值对象。 Map没有继承于Collection接口。从Map集合中检索元素时，只要给出键对象，就会返回对应的值对象。Kitlin中，与list、set一样的是，Map也分为只读map和可变两种。Kotlin中，创建Map时，需调用标准库中的系列函数，如mapOf()，mutableMapOf()，他们所创建的Map是基于Java的LinkedHashMap，Kotlin并不支持Java的TreeMap  
-`HashMap`：Map基于散列表的实现，插入和查询“键值对”的开销是固定的。可以通过构造器设置容量capacity和负载因子load factor，以调整容器的性能
-`LinkedHashMap`： 类似于HashMap，但是迭代遍历它时，取得“键值对”的顺序是其插入次序，或者是最近最少使用(LRU)的次序。只比HashMap慢一点。而在迭代访问时发而更快，因为它使用链表维护内部次序  
+是一种把键对象和值对象映射的集合，它的每一个元素都包含一对键对象和值对象。 Map没有继承于Collection接口，从Map集合中检索元素时，只要给出键对象，就会返回对应的值对象。Kitlin中，与list、set一样的是，Map也分为只读map和可变两种。Kotlin中，创建Map时，需调用标准库中的系列函数，如mapOf()，mutableMapOf()，他们所创建的Map是基于Java的LinkedHashMap，Kotlin并不支持Java的TreeMap  
+`HashMap`：Map基于散列表的实现，插入和查询“键值对”的开销是固定的。可以通过构造器设置容量capacity和负载因子load factor，以调整容器的性能  
+`LinkedHashMap`： 类似于HashMap，但是迭代遍历它时，取得“键值对”的顺序是其插入次序，或者是最近最少使用(LRU)的次序，只比HashMap慢一点，而在迭代访问时发而更快，因为它使用链表维护内部次序  
 ```
 var hashMap = hashMapOf<Int, Book>(1 to b1, 2 to b2, 3 to b3)
 var linkedMap = linkedMapOf<String, Book>("sky" to b1, "lotus" to b4) 
