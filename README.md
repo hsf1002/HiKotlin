@@ -2,7 +2,7 @@
 kotlin common grammer
 
 
-# Kotlin的优点
+## Kotlin的优点
 1. 可读性更高，更简洁，使用Kotlin，可以更容易的避免创建模版型代码，因为大多数经典的情景都默认包含在Kotlin中
 2. 空指针安全，当我们用java开发时，我们的大多数代码是要进行类型检查的，如果我们不想出现\*\*unexpected NullPointerException\*\*的话,我们就要在运行代码之前持续的检查是否有对象为null。Kotlin，和其它语言一样，是空指针安全的，因为我们可以通过安全的调用操作来准确的声明一个object可以为null  
  ```
@@ -12,45 +12,46 @@ kotlin common grammer
     var artist: Artist? = null
     artist.print()    // Will print only if artist != null
     artist?.print()    // Smart cast. We don´t need to use safe call operator if we previously checked     nullity
-    ```
+```
 3. 扩展方法
-可以给任何类添加新方法，这比我们在project中使用的工具类可读性更高。例如：可以给Fragment添加一个新方法来显示Toast。
+可以给任何类添加新方法，这比我们在project中使用的工具类可读性更高。例如：可以给Fragment添加一个新方法来显示Toast  
 ```
 fun Fragment.toast(message: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(getActivity(), message, duration).show()
 }
 ```
-可以这样使用：
-    ```
+可以这样使用：  
+```
     fragment.toast("Hello world!")
-    ```
+```
 4. 支持函数式编程
 如果我们可以不用在我们需要的时候每一次都创建一个listener，就像创建一个click listener那样的操作， 
 而是仅仅定义我们想要做什么？这种想法的确可以实现，它的实现得益于**lambda**d的使用：
-    ```
+```
     view.setOnClickListener({ toast("Hello world!") })
-  ```
-# Kotlin的缺点
+```
+## Kotlin的缺点  
 Kotlin 依旧在发展，虽然它相对稳定，并且final release版本就很快发布，但是Kotlin在进行android相关开发的时候还是有些限制的  
 1. 交互性与自动代码生成：一些有名的android Libraries，例如Dagger 或 Butterknife，他们依赖于自动代码生成，这种情况下如果有名字冲突的话将无法进行代码生成。Kotlin正在解决这个问题，所以这个问题也许会很快解决。无论如何，我将在接下来的文章里阐明，Kotlin语言的表达能力会让我们觉得不再需要那么多的 Libraries。
 2. 声明自定义View比较困难：Kotlin类只能声明一个构造函数，然而自定义View通常需要三个。如果我们使用代码来创建View的话可以避免这个问题，但对于使用XML文件来声明View的话就不能满足需求了。最容易的变通方式是用java来声明这些自定义View的实现类，然后通过Kotlin来使用它们。Kotlin团队许诺将在M11 release解决这个问题。
 
-package语句必须是文件中的第一行非注释的程序代码，如果没有指定包名， 那这个文件的内容就从属于没有名字的 “default” 包；import，如果将两个含有相同名称的的类库以“*”同时导入，将会存在潜在的冲突，此时要么完全指明导入类的具体位置，要么用as关键字局部重命名，以解决冲突
+package语句必须是文件中的第一行非注释的程序代码，如果没有指定包名， 那这个文件的内容就从属于没有名字的 “default” 包；import，如果将两个含有相同名称的的类库以 * 同时导入，将会存在潜在的冲突，此时要么完全指明导入类的具体位置，要么用as关键字局部重命名，以解决冲突  
 
 ## 基本数据类型  
 和Java一样，Kotlin也是基于JVM的，不同的是，后者是静态类型语言，意味着所有变量和表达式类型在编译时已确定。在Java中，通过装箱和拆箱在基本数据类型和包装类型之间相互转换，而，Kotlin中，所有变量的成员方法和属性都是对象。一些类型是Kotlin中内建，相当于创建的普通类，直接调用即可。  
 在Kotlin源代码中，不管是常量还是变量在声明是都必须具有类型注释或者初始化。如果在声明时，进行了初始化，会自行推导其数据类型，以为着常量或者变量注释类型。Kotlin中的数据类型包括数值类型、字符类型、布尔类型等  
-字符类型不是基本数值类型，是一个独立的数据类型，字符是单引号包起来的 ‘1’ , ‘\n’ , ‘\uFF00’ ，可以通过显示转换将其转换为Int型，和数值类型一样，字符类型在空检查后会在需要的时候装箱，特性不会被装箱操作保留；布尔值只有 true 或者 false，看Boolean源码可知，其内置的操作包括not(非)、and(与)、or(或)、xor(异或)、compareTo()等；  
-==  
+字符类型不是基本数值类型，是一个独立的数据类型，字符是单引号包起来的 ‘1’ , ‘\n’ , ‘\uFF00’ ，可以通过显示转换将其转换为Int型，和数值类型一样，字符类型在空检查后会在需要的时候装箱，特性不会被装箱操作保留；布尔值只有 true 或者 false，看Boolean源码可知，其内置的操作包括not(非)、and(与)、or(或)、xor(异或)、compareTo()等  
+
+`==`  
 1. 如果作用于基本数据类型的变量，则直接比较其存储的 “值”是否相等
 2. 如果作用于引用类型的变量，则比较的是所指向的对象的地址  
 
-equals  
+`equals`  
 1. equals方法不能作用于基本数据类型的变量
 2. 如果没有对equals方法进行重写，则比较的是引用类型的变量所指向的对象的地址
 3.诸如String、Date等类对equals方法进行了重写的话，比较的是所指向的对象的内容  
 
-===  
+`===`    
 1. 对于基本数据类型，如果类型不同，其结果就是不等。如果同类型相比，与“==”一致，直接比较其存储的 “值”是否相等；
 2. 对于引用类型，与“==”一致，比较的是所指向的对象的地址  
 
@@ -147,8 +148,7 @@ fun gaojie_fun(a:Int, b:Int, sumSom:(Int, Int, Int) -> Int): Int{
 ```  
 
 ## 类  
-所有的类默认都是不可继承的，即默认被final修饰符修饰。故在创建一个类，并作为父类时，需手动添加open或者abstract关键字，以声明此类可被继承；声明的属性值必须得初始化,属性必须初始化，否则编译报错.或者将此属性用abstract修饰符修饰。在abstract修饰的属性值，即使不用初始化，必须声明其数据类型，并在其子类初始化；默认为被public修饰符修饰，也就意味着其他类可以通过其类任意调用  
-声明属性时，编辑器会自动生成getter和setter方法，var是允许有getter 和 setter方法，如果变量是val声明的，它类似于Java中的final，所以如果以val声明就不允许有setter方法，如果属性值的数据类型可以通过编译器自动推断，或者在getter和setter方法中并没有对属性做特殊处理，这些方法都可以省略；如果你想改变访问的可见性或者是对其进行注解，但是又不想改变它的默认实现，那么你就可以定义set和get但不进行实现  
+所有的类默认都是不可继承的，即默认被final修饰符修饰。故在创建一个类，并作为父类时，需手动添加open或者abstract关键字，以声明此类可被继承；声明的属性值必须得初始化,属性必须初始化，否则编译报错.或者将此属性用abstract修饰符修饰。在abstract修饰的属性值，即使不用初始化，必须声明其数据类型，并在其子类初始化；默认为被public修饰符修饰，也就意味着其他类可以通过其类任意调用。声明属性时，编辑器会自动生成getter和setter方法，var是允许有getter 和 setter方法，如果变量是val声明的，它类似于Java中的final，所以如果以val声明就不允许有setter方法，如果属性值的数据类型可以通过编译器自动推断，或者在getter和setter方法中并没有对属性做特殊处理，这些方法都可以省略；如果你想改变访问的可见性或者是对其进行注解，但是又不想改变它的默认实现，那么你就可以定义set和get但不进行实现  
 ```
 var setterVisibility: String = "abc"
 private set // 设值方法的可见度为 private, 并使用默认实现
@@ -167,8 +167,9 @@ class Person {
             field = value
         } else {
             field = -1
-            ```  
+```  
 getter方法的可见性与属性的可见性一致。假如声明一个public变量，将其的getter方法用其他修饰符修饰，会报错，setter方法可以自定义修饰符，其修饰符不一定与属性的修饰符一致，其使用范围由修饰符决定，并不一定与属性的适用范围一致  
+
 lateinit修饰符只能用于 var 属性, 而且只能是声明在类主体部分之内的属性(不可以是主构造器中声明的属性)，此类属性不能有自定义的取值方法和设值方法，属性类型必须是非 null 的, 而且不能是基本类型，被声明延迟初始化的属性，必须在使用以前调用其初始化方法，否则会报异常  
 ```
 class MyInfo {
