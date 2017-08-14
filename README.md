@@ -287,8 +287,9 @@ class Person(var name : String, var age : Int) {
 
 在Kotlin中如果函数体只有一句的话,可以省略大括号,=后面就是返回值.这种简化函数的方法类似于lambda表达式  
 
-伴随
-在类的内部声明，使用companion关键字标记声明，其名字可省略，可代替Java中的static，但更像Java中成员内部类
+## 伴随  
+在类的内部声明，使用companion关键字标记声明，其名字可省略，可代替Java中的static，但更像Java中成员内部类  
+```
 abstract class Person(val name:String, val age:Int, val gender:Char){
     abstract val DNA:String
     companion object DesPerson {
@@ -309,33 +310,41 @@ class Student(name:String, age:Int, gender:Char, val major:String):Person(name, 
             println("total student: $total")
         }
     }
+```  
 
-扩展
-扩展函数并没有对原类做修改，而是为被扩展类的对象添加新的函数，展函数是静态解析的，它并不是接收者类型的虚拟成员，意味着调用扩展函数时，具体被调用的是哪一个函数，由调用函数的的对象表达式来决定，而不是动态的类型决定，扩展属性实际上不会向类添加新的成员，因此无法让一个扩展属性拥有一个后端域变量.；对于扩展属性不允许存在初始化器，扩展属性的行为只能通过明确给定的取值方法与设值方法来定义，意味着扩展属性只能被声明为val而不能被声明为var，如果强制声明为var，即使进行了初始化，在运行也会报异常错误，提示该属性没有后端域变量；在类的内部，也可以为另外一个类定义扩展
+## 扩展  
+扩展函数并没有对原类做修改，而是为被扩展类的对象添加新的函数，展函数是静态解析的，它并不是接收者类型的虚拟成员，意味着调用扩展函数时，具体被调用的是哪一个函数，由调用函数的的对象表达式来决定，而不是动态的类型决定，扩展属性实际上不会向类添加新的成员，因此无法让一个扩展属性拥有一个后端域变量.；对于扩展属性不允许存在初始化器，扩展属性的行为只能通过明确给定的取值方法与设值方法来定义，意味着扩展属性只能被声明为val而不能被声明为var，如果强制声明为var，即使进行了初始化，在运行也会报异常错误，提示该属性没有后端域变量；在类的内部，也可以为另外一个类定义扩展  
+```
 val Student.last_idx:Int
     get() = Student.total - 1
 fun Student.run() {
     println("Expand function: I am a student running.")
 }
-伴随对象的扩展
+```  
+
+## 伴随对象的扩展  
+```
 val Student.Companion.number:Int
     get() = 94
 fun Student.Companion.printNum(){
     println("Expand Companion function: my num is ${Student.Companion.number}")
 }
 this@MyInfo.doFly() // 调用本类被隐藏额函数
+```  
 
-异常
-在Kotlin中，所有的异常都继承于Throwable。对于每一个异常而言，它不仅仅包括异常的信息，还可以选择性包括异常的原因；try、catch、finally三个语句块均不能单独使用，三者可以组成 try…catch…finally、try…catch、try…finally三种结构，catch语句可以有一个或多个，finally语句最多一个；try、catch、finally三个代码块中变量的作用域为代码块内部，分别独立而不能相互访问。如果要在三个块中都可以访问，则需要将变量定义到这些块的外面；多个catch块时候，只会匹配其中一个异常类并执行catch块代码，而不会再执行别的catch块，并且匹配catch语句的顺序是由上到下；try表达式中可以有0个或多个catch代码段. finally 代码段可以省略. 但是,catch或 finally代码段至少要出现一个与try配对出现
+## 异常  
+在Kotlin中，所有的异常都继承于Throwable。对于每一个异常而言，它不仅仅包括异常的信息，还可以选择性包括异常的原因；try、catch、finally三个语句块均不能单独使用，三者可以组成 try…catch…finally、try…catch、try…finally三种结构，catch语句可以有一个或多个，finally语句最多一个；try、catch、finally三个代码块中变量的作用域为代码块内部，分别独立而不能相互访问。如果要在三个块中都可以访问，则需要将变量定义到这些块的外面；多个catch块时候，只会匹配其中一个异常类并执行catch块代码，而不会再执行别的catch块，并且匹配catch语句的顺序是由上到下；try表达式中可以有0个或多个catch代码段. finally 代码段可以省略. 但是,catch或 finally代码段至少要出现一个与try配对出现  
 
-抽象
+## 抽象  
 抽象方法是一种特殊的方法：它只有声明，而没有具体的实现，抽象方法必须用abstract关键字进行修饰
-抽象方法不用手动添加open，默认被open修饰，抽象方法没有具体的实现，含有抽象方法的类成为抽象类，必须由abtract关键字修饰，在抽象类中，不仅可以有抽象方法，同时可以有具体实现的方法；抽象属性就是在var或val前被abstract修饰，抽象属相在抽象类中不能被初始化 ，如果在子类没有主构造函数，要对抽象属性，手动初始化。如果子类中有主构造函数，抽象属性可以在主构造函数中声明
-抽象类和普通类的区别：
-抽象方法必须为public或者protected（因为如果为private，则不能被子类继承，子类便无法实现该方法），缺省情况下默认为public；抽象类不能用来创建对象；如果一个类继承于一个抽象类，则子类必须实现父类的抽象方法，如果子类没有实现父类的抽象方法，则必须将子类也定义为为abstract类，如果抽象类中含有抽象属性，再实现子类中必须将抽象属性初始化，除非子类也为抽象类
+抽象方法不用手动添加open，默认被open修饰，抽象方法没有具体的实现，含有抽象方法的类成为抽象类，必须由abtract关键字修饰，在抽象类中，不仅可以有抽象方法，同时可以有具体实现的方法；抽象属性就是在var或val前被abstract修饰，抽象属相在抽象类中不能被初始化 ，如果在子类没有主构造函数，要对抽象属性，手动初始化。如果子类中有主构造函数，抽象属性可以在主构造函数中声明  
 
-接口
-接口和抽象类不同的是，接口不能保存状态，可以有属性但必须是抽象的，接口是通过关键字 interface 来定义，接口中允许定义属性，但不允许直接初始化，默认是 abstract的，接口不会保存属性值，实现接口时，必须重载属性；接口声明与类一致，接口是特殊的抽象类，接口可以继承类或接口，java中是不允许接口继承类的
+## 抽象类和普通类的区别：  
+抽象方法必须为public或者protected（因为如果为private，则不能被子类继承，子类便无法实现该方法），缺省情况下默认为public；抽象类不能用来创建对象；如果一个类继承于一个抽象类，则子类必须实现父类的抽象方法，如果子类没有实现父类的抽象方法，则必须将子类也定义为为abstract类，如果抽象类中含有抽象属性，再实现子类中必须将抽象属性初始化，除非子类也为抽象类  
+
+## 接口  
+接口和抽象类不同的是，接口不能保存状态，可以有属性但必须是抽象的，接口是通过关键字 interface 来定义，接口中允许定义属性，但不允许直接初始化，默认是 abstract的，接口不会保存属性值，实现接口时，必须重载属性；接口声明与类一致，接口是特殊的抽象类，接口可以继承类或接口，java中是不允许接口继承类的  
+```
 public interface SomeInterface{
     var value:String //默认abstract
     fun reading() // 未实现
@@ -352,11 +361,14 @@ interface IBox :Box{
         println("beat $name")
     }
 }
-一个类只能继承一个抽象类，却可以实现多个接口；抽象类是对事物的抽象，即对类抽象，而接口是对行为的抽象，抽象类是对整个类整体进行抽象，包括属性、行为，但接口却是对类局部（行为）进行抽象。飞机和鸟是不同类的事物，但是它们都有一个共性会飞；在设计的时候，将飞机设计为一个类Airplane，将鸟设计为一个类Bird，但是不能将 飞行 这个特性也设计为类，因此它只是一个行为特性，并不是对一类事物的抽象描述。此时可以将 飞行 设计为一个接口Fly，包含方法fly( )，然后Airplane和Bird分别根据自己的需要实现Fly这个接口
-继承是一个 “是不是”的关系，而 接口 实现则是 “有没有”的关系；抽象类作为很多子类的父类，它是一种模板式设计，而接口是一种行为规范，它是一种辐射式设计；对于抽象类，如果需要添加新的方法，可以直接在抽象类中添加具体的实现，子类可以不进行变更；而对于接口则不行，如果接口进行了变更，则所有实现这个接口的类都必须进行相应的改动
+```  
+一个类只能继承一个抽象类，却可以实现多个接口；抽象类是对事物的抽象，即对类抽象，而接口是对行为的抽象，抽象类是对整个类整体进行抽象，包括属性、行为，但接口却是对类局部（行为）进行抽象。飞机和鸟是不同类的事物，但是它们都有一个共性会飞；在设计的时候，将飞机设计为一个类Airplane，将鸟设计为一个类Bird，但是不能将 飞行 这个特性也设计为类，因此它只是一个行为特性，并不是对一类事物的抽象描述。此时可以将 飞行 设计为一个接口Fly，包含方法fly( )，然后Airplane和Bird分别根据自己的需要实现Fly这个接口  
 
-继承
-以“:”操作符，完成子类继承父类；在官方文档上Any类是所有Kotlin文件的根，所有的类均继承于Any类；创建一个类时，若未声明父类，会隐式的继承于Any；Any类并不是Java.lang.Object类，其仅有equals(other: Any?)、 hashCode()、toString()等三个方法，并没有任何其他成员属性；在kotlin中， 实现继承通常遵循如下规则：如果一个类从它的直接父类继承了同一个函数的多个实现，那么它必须重写这个函数并且提供自己的实现(或许只是直接用了继承来的实现) 为表示使用父类中提供的方法我们用 super 表示，子类构造函数要么单独初始化父类成员变量，要么调用super；
+继承是一个 “是不是”的关系，而 接口 实现则是 “有没有”的关系；抽象类作为很多子类的父类，它是一种模板式设计，而接口是一种行为规范，它是一种辐射式设计；对于抽象类，如果需要添加新的方法，可以直接在抽象类中添加具体的实现，子类可以不进行变更；而对于接口则不行，如果接口进行了变更，则所有实现这个接口的类都必须进行相应的改动  
+
+## 继承  
+以“:”操作符，完成子类继承父类；在官方文档上Any类是所有Kotlin文件的根，所有的类均继承于Any类；创建一个类时，若未声明父类，会隐式的继承于Any；Any类并不是Java.lang.Object类，其仅有equals(other: Any?)、 hashCode()、toString()等三个方法，并没有任何其他成员属性；在kotlin中， 实现继承通常遵循如下规则：如果一个类从它的直接父类继承了同一个函数的多个实现，那么它必须重写这个函数并且提供自己的实现(或许只是直接用了继承来的实现) 为表示使用父类中提供的方法我们用 super 表示，子类构造函数要么单独初始化父类成员变量，要么调用super；  
+```
 open class A {
     open fun f () { print("A") }
     fun a() { print("a") }
@@ -369,14 +381,16 @@ class C() : A() , B{
     override fun f() {
         super<A>.f()//调用 A.f()
         super<B>.f()//调用 B.f()
-...................
-当子类继承了某个类之后，便可以使用父类中的成员变量，但是并不是完全继承父类的所有成员变量。具体的原则如下：
-能够继承父类的public和protected成员变量；不能够继承父类的private成员变量；对于父类的包访问权限成员变量，如果子类和父类在同一个包下，则子类能够继承；否则，子类不能够继承；对于子类可以继承的父类成员变量，如果在子类中出现了同名称的成员变量，则会发生隐藏现象，即子类的成员变量会屏蔽掉父类的同名成员变量。如果要在子类中访问父类中同名成员变量，需要使用super关键字来进行引用
+```  
 
-解构声明
-就是将一个对象解构(destructure)为多个变量，意味着一个解构声明会一次性创建多个变量。有两个动作：声明了多个变量；将对象的属性值赋值给相应的变量。在Kotlin-数据类中，编译器会根据主构造器中声明的全部属性, 自动推断产生componentN() 函数群, 这些函数与类的属性对应，函数名中的数字1到N，与属性的声明顺序一致，但对于普通类的成员属性，编译器并不会自动推断产生componentN() ，此时componentN()，需要我们自己定义了。对于自定义的componentN()，需要注意以下几点：
+当子类继承了某个类之后，便可以使用父类中的成员变量，但是并不是完全继承父类的所有成员变量。具体的原则如下：
+能够继承父类的public和protected成员变量；不能够继承父类的private成员变量；对于父类的包访问权限成员变量，如果子类和父类在同一个包下，则子类能够继承；否则，子类不能够继承；对于子类可以继承的父类成员变量，如果在子类中出现了同名称的成员变量，则会发生隐藏现象，即子类的成员变量会屏蔽掉父类的同名成员变量。如果要在子类中访问父类中同名成员变量，需要使用super关键字来进行引用  
+
+## 解构声明  
+就是将一个对象解构(destructure)为多个变量，意味着一个解构声明会一次性创建多个变量。有两个动作：声明了多个变量；将对象的属性值赋值给相应的变量。在Kotlin-数据类中，编译器会根据主构造器中声明的全部属性, 自动推断产生componentN() 函数群, 这些函数与类的属性对应，函数名中的数字1到N，与属性的声明顺序一致，但对于普通类的成员属性，编译器并不会自动推断产生componentN() ，此时componentN()，需要我们自己定义了。对于自定义的componentN()，需要注意以下几点：  
 1. componentN()函数需要标记为 operator , 才可以在解构声明中使用 
-2. componentN()函数的返回值类型必须与属性类型一致
+2. componentN()函数的返回值类型必须与属性类型一致  
+```
 fun main(args: Array<String>) {
     val p1 = Person("sky", 20)   
     val p2 = Person("lotus", 21)
@@ -402,10 +416,12 @@ data class Person(var name: String, var age: Int) {   // must be data class
         return this.mobile!!        // !! NotEmpty judgement
     }
 }
+```  
 
-集合-set
+## 集合-set  
 其对象不排序、不重复；Kotlin没有专门的语法用来创建set，可以使用标准库中的方法比如setOf()-只读mutableSetOf()-可写；
-Kotlin中，标准的数据类型，比如基本数据类型、String等都有了相应的判定方式，对于自定义的类，判断两个对象的是否重复标准是hashCode()和equals()两个参考值，只有两个对象的hashCode值一样与equals()为真时，才认为是相同的对象，所以自定义的类必须要要重写hashCode()和equals()两个函数
+Kotlin中，标准的数据类型，比如基本数据类型、String等都有了相应的判定方式，对于自定义的类，判断两个对象的是否重复标准是hashCode()和equals()两个参考值，只有两个对象的hashCode值一样与equals()为真时，才认为是相同的对象，所以自定义的类必须要要重写hashCode()和equals()两个函数  
+```
 fun main(args: Array<String>) {
     val b1 = Book("Walden", 444, "Lusou")
     val b2 = Book("Gone with the Wind", 888, "Feiwenli")
@@ -436,26 +452,31 @@ data class Book(var name:String, var page:Int, var anthor:String){
         return this.name
     }
 }
+```
 
-集合-List
-其对象以线性方式存储，有序，可重复；与set一样，Kotlin并没有提供创建List的函数，如果想创建一个List，可以调用标准库中的方法，listOf() , mutableListOf()。listOf()是使用ArrayList实现的，返回的list是只读的，其内存效率更高。在开发过程中，可以尽可能的多用只读List，可以在一定程度上提高内存效率
+## 集合-List  
+其对象以线性方式存储，有序，可重复；与set一样，Kotlin并没有提供创建List的函数，如果想创建一个List，可以调用标准库中的方法，listOf() , mutableListOf()。listOf()是使用ArrayList实现的，返回的list是只读的，其内存效率更高。在开发过程中，可以尽可能的多用只读List，可以在一定程度上提高内存效率  
 
-集合-Map
-是一种把键对象和值对象映射的集合，它的每一个元素都包含一对键对象和值对象。 Map没有继承于Collection接口。从Map集合中检索元素时，只要给出键对象，就会返回对应的值对象。Kitlin中，与list、set一样的是，Map也分为只读map和可变两种。Kotlin中，创建Map时，需调用标准库中的系列函数，如mapOf()，mutableMapOf()，他们所创建的Map是基于Java的LinkedHashMap，Kotlin并不支持Java的TreeMap 
-HashMap：Map基于散列表的实现，插入和查询“键值对”的开销是固定的。可以通过构造器设置容量capacity和负载因子load factor，以调整容器的性能
-LinkedHashMap： 类似于HashMap，但是迭代遍历它时，取得“键值对”的顺序是其插入次序，或者是最近最少使用(LRU)的次序。只比HashMap慢一点。而在迭代访问时发而更快，因为它使用链表维护内部次序
+## 集合-Map  
+是一种把键对象和值对象映射的集合，它的每一个元素都包含一对键对象和值对象。 Map没有继承于Collection接口。从Map集合中检索元素时，只要给出键对象，就会返回对应的值对象。Kitlin中，与list、set一样的是，Map也分为只读map和可变两种。Kotlin中，创建Map时，需调用标准库中的系列函数，如mapOf()，mutableMapOf()，他们所创建的Map是基于Java的LinkedHashMap，Kotlin并不支持Java的TreeMap  
+`HashMap`：Map基于散列表的实现，插入和查询“键值对”的开销是固定的。可以通过构造器设置容量capacity和负载因子load factor，以调整容器的性能
+`LinkedHashMap`： 类似于HashMap，但是迭代遍历它时，取得“键值对”的顺序是其插入次序，或者是最近最少使用(LRU)的次序。只比HashMap慢一点。而在迭代访问时发而更快，因为它使用链表维护内部次序  
+```
 var hashMap = hashMapOf<Int, Book>(1 to b1, 2 to b2, 3 to b3)
 var linkedMap = linkedMapOf<String, Book>("sky" to b1, "lotus" to b4) 
+```  
 
-
-函数重载
+## 函数重载  
+```
 fun  add():Int
 fun  add(x:Int):Int
 fun  add(x:Int, y:Int):Int
 fun  add(x:Double, y:Double):Double
 fun  add(x:Int, y:Int, z:Int):Int
+```  
 
-运算符重载
+## 运算符重载  
+```
 class override_operator(var x:Int, var y:Int){
 constructor():this(0, 0)
 operator fun plus(z:override_operator):override_operator
@@ -466,3 +487,4 @@ operator fun mod(z:override_operator):override_operator
 operator fun compareTo(z:override_operator):Int
 override fun equals(z:Any?):Boolean
 其他运算符：rangeTo，unaryPlus，unaryMinus，not，inc，des
+```
