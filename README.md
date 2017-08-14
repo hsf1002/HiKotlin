@@ -479,13 +479,13 @@ fun  add(x:Int, y:Int, z:Int):Int
 ## 运算符重载  
 ```
 class override_operator(var x:Int, var y:Int){
-constructor():this(0, 0)
-operator fun plus(z:override_operator):override_operator
-operator fun minus(z:override_operator):override_operator
-operator fun times(z:override_operator):override_operator
-operator fun div(z:override_operator):override_operator
-operator fun mod(z:override_operator):override_operator
-operator fun compareTo(z:override_operator):Int
-override fun equals(z:Any?):Boolean
+        constructor():this(0, 0)
+        operator fun plus(z:override_operator):override_operator
+        operator fun minus(z:override_operator):override_operator
+        operator fun times(z:override_operator):override_operator
+        operator fun div(z:override_operator):override_operator
+        operator fun mod(z:override_operator):override_operator
+        operator fun compareTo(z:override_operator):Int
+        override fun equals(z:Any?):Boolean
 其他运算符：rangeTo，unaryPlus，unaryMinus，not，inc，des
 ```
