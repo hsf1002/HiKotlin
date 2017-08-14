@@ -190,17 +190,20 @@ fun main(args: Array<String>) {
 ```  
 
 ## 数据类  
-创建一些数据里，没有任何逻辑功能，仅仅来用来保存数据，在Kolin中，将这些类统一称为数据类，用关键字data标记，数据类的声明条件
-  ● 主构造器至少要有一个参数
-  ● 主构造器的所有参数必须标记为 val 或 var 
-  ● 数据类不能是抽象类、open 类、封闭(sealed)类、或内部(inner)类
-  ● 数据类不能继承自任何其他类(但可以实现接口)
-如果数据类有无参构造函数，需在主构造函数中将成员属性初始化，编译器会根据主构造器中声明的全部属性, 自动推断产生以下成员函数:
-  ● equals()/hashCode()函数对
-  ● toString() 函数, 输出格式为 “User(name=John, age=42)” 
-  ● componentN() 函数群, 这些函数与类的属性对应, 函数名中的数字 1 到 N, 与属性的声明顺序一致
-  ● copy() 函数（功能是复制一个对象，然后修改其一部分属性，但保持其他属性保持不变。copy并不是简单的复制，它会创建新的对象，对于基本类型的属性，其值会被拷贝并赋值，但是对于引用类型，其只是将其地址传递过去，还是进行浅拷贝，并没有创建新的对象）
+创建一些数据里，没有任何逻辑功能，仅仅来用来保存数据，在Kolin中，将这些类统一称为数据类，用关键字data标记，数据类的声明条件  
+* 主构造器至少要有一个参数
+* 主构造器的所有参数必须标记为 val 或 var 
+* 数据类不能是抽象类、open 类、封闭(sealed)类、或内部(inner)类
+* 数据类不能继承自任何其他类(但可以实现接口)  
+
+如果数据类有无参构造函数，需在主构造函数中将成员属性初始化，编译器会根据主构造器中声明的全部属性, 自动推断产生以下成员函数:  
+* equals()/hashCode()函数对
+* toString() 函数, 输出格式为 “User(name=John, age=42)” 
+* componentN() 函数群, 这些函数与类的属性对应, 函数名中的数字 1 到 N, 与属性的声明顺序一致
+* copy() 函数（功能是复制一个对象，然后修改其一部分属性，但保持其他属性保持不变。copy并不是简单的复制，它会创建新的对象，对于基本类型的属性，其值会被拷贝并赋值，但是对于引用类型，其只是将其地址传递过去，还是进行浅拷贝，并没有创建新的对象）  
+
 如果在该数据类或者基类中重写了以上某个成员函数，将不会再自动推断，以重写的为准
+```
 data class Person(var name: String, var age: Int) {
 } 
 data class MyInfo(val no: Int, var person: Person) { 
@@ -215,8 +218,10 @@ println("$n, $a years of age") // 打印结果将是 "Jane, 35 years of age"
 b?.length  如果b不是null，这个表达式将会返回b.length
 val len = b?.length ?: -1  如果 ?: 左侧的表达式值不是null, 就会返回表达式的的值，否则，返回右侧表达式的值
 val len = b!!.length  如果b不为null, 这个表达式将会返回这个非null值，否则如果b是 null, 这个表达式就会抛出一个 NPE
+```  
 
-嵌套类
+## 嵌套类  
+```
 class nested {       
     val nest_i = 88
     fun nest_fun()    {
@@ -226,8 +231,10 @@ class nested {
 }
 val nested = Student.nested()
 nested.nest_fun()
+```  
 
-内部类
+## 内部类  
+```
 inner  class innerted {     
     val inner_i = 99
     fun inner_fun()    {
@@ -236,40 +243,49 @@ inner  class innerted {
     }
 }
 s.innerted().inner_fun()        // only called by specific object
+```  
 
-修饰符
-在Kotlin中，存在private、protectedinternal以及 public等四种修饰符，它们可用于修饰类、对象、接口、构造器、函数、属性、以及属性的设值方法等，局部变量, 局部函数, 以及局部类, 都不能指定可见度修饰符
-包-Kotlin中，包级别的定义称为top-level,即直接定义在包内，可定义函数、属性、类、对象及接口。
-  ● public：默认修饰符，被其修饰的在任何位置都能访问
-  ● private：只能在当前源文件内使用
-  ● internal：在同一模块内使用（是指一起编译的一组 Kotlin 源代码文件）
-  ● protected：在当前类及其子类内访问
-类和接口
-  ● public：默认修饰符，被其修饰的在任何位置都能访问
-  ● private：表示只在这个类(以及它的所有成员)之内可以访问
-  ● internal：在同一模块内使用
-  ● protected：在当前类及其子类内访问
-访问强度：public>internal>protected>private
-一般在类的主构造器都不使用修饰符修饰，即默认使用public修饰符。但在实际开发时，主构造器可能被其他修饰符修饰。比如在创建单例模式时，为了防止在外部调用主构造器，主构造器就是使用private修饰符修饰。当使用其他修饰符修饰构造器时，需要明确添加一个constructor关键字
+## 修饰符  
+在Kotlin中，存在private、protectedinternal以及 public等四种修饰符，它们可用于修饰类、对象、接口、构造器、函数、属性、以及属性的设值方法等，局部变量, 局部函数, 以及局部类, 都不能指定可见度修饰符  
+`包-Kotlin中，包级别的定义称为top-level,即直接定义在包内，可定义函数、属性、类、对象及接口`  
+* public：默认修饰符，被其修饰的在任何位置都能访问
+* private：只能在当前源文件内使用
+* internal：在同一模块内使用（是指一起编译的一组 Kotlin 源代码文件）
+* protected：在当前类及其子类内访问  
 
-构造函数
-主构造函数（primary constructor）不能包含任意代码，只能声明构造函数的参数，参数若不设置为var或val，默认为val，其值不可修改。若想初始化代码，放在以init做前缀的初始化块内。如果主构造函数没有任何注解或者可见性声明，constructor关键字可以被省略，主构造函数可以定义一个，如果定义了，则二级构造函数必须用this调用主构造函数，主构造函数的函数体是init块，每个构造函数必须初始化所有成员变量
+`类和接口`  
+* public：默认修饰符，被其修饰的在任何位置都能访问
+* private：表示只在这个类(以及它的所有成员)之内可以访问
+* internal：在同一模块内使用
+* protected：在当前类及其子类内访问  
+
+`访问强度：public>internal>protected>private`  
+
+一般在类的主构造器都不使用修饰符修饰，即默认使用public修饰符。但在实际开发时，主构造器可能被其他修饰符修饰。比如在创建单例模式时，为了防止在外部调用主构造器，主构造器就是使用private修饰符修饰。当使用其他修饰符修饰构造器时，需要明确添加一个constructor关键字  
+
+## 构造函数  
+主构造函数（primary constructor）不能包含任意代码，只能声明构造函数的参数，参数若不设置为var或val，默认为val，其值不可修改。若想初始化代码，放在以init做前缀的初始化块内。如果主构造函数没有任何注解或者可见性声明，constructor关键字可以被省略，主构造函数可以定义一个，如果定义了，则二级构造函数必须用this调用主构造函数，主构造函数的函数体是init块，每个构造函数必须初始化所有成员变量  
+```
 class Person(var name : String, var age : Int) { 
     init {
         name = "zhang"
         println("Person init")
     }
-每次Person创建对象时，都会调用init初始化代码块
-
+```    
+每次Person创建对象时，都会调用init初始化代码块  
+```
 calss Customer public inject constructor (name: String) {...}
-如果类有主构造函数，每个二级构造函数都要或直接或间接通过使用 this 关键字初始化主构造函数
+```
+如果类有主构造函数，每个二级构造函数都要或直接或间接通过使用 this 关键字初始化主构造函数  
+```
 class Person(var name : String, var age : Int) {
      constructor( name: String,  age: Int, addr: String) : this(name, age) {
      }
      constructor(name: String, age: Int, addr: String, sex: Int) :  this(name, age, addr){
-二级构造函数的参数不能设定为var或val，但默认为val类型，主构造函数里面的参数即为该类的属性，而二级构造函数中的参数，只是参数，并不是该类的属性；在JVM虚拟机中，如果主构造函数的所有参数都有默认值，编译器会生成一个无参的构造函数；如果一个非抽象类没有声明构造函数(主构造函数或二级构造函数)，它会产生一个没有参数的构造函数；构造函数的权限修饰符为public，如果想的类有公共的构造函数私有化，你就得声明一个空的主构造函数，并用private修饰
+```       
+二级构造函数的参数不能设定为var或val，但默认为val类型，主构造函数里面的参数即为该类的属性，而二级构造函数中的参数，只是参数，并不是该类的属性；在JVM虚拟机中，如果主构造函数的所有参数都有默认值，编译器会生成一个无参的构造函数；如果一个非抽象类没有声明构造函数(主构造函数或二级构造函数)，它会产生一个没有参数的构造函数；构造函数的权限修饰符为public，如果想的类有公共的构造函数私有化，你就得声明一个空的主构造函数，并用private修饰  
 
-在Kotlin中如果函数体只有一句的话,可以省略大括号,=后面就是返回值.这种简化函数的方法类似于lambda表达式
+在Kotlin中如果函数体只有一句的话,可以省略大括号,=后面就是返回值.这种简化函数的方法类似于lambda表达式  
 
 伴随
 在类的内部声明，使用companion关键字标记声明，其名字可省略，可代替Java中的static，但更像Java中成员内部类
