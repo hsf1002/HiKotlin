@@ -41,8 +41,26 @@ Kotlin 依旧在发展，虽然它相对稳定，并且final release版本就很
 
 ## 基本数据类型  
 和Java一样，Kotlin也是基于JVM，不同的是，后者是静态类型语言，意味着所有变量和表达式类型在编译时已确定。在Java中，通过装箱和拆箱在基本数据类型和包装类型之间相互转换，而Kotlin中，所有变量的成员方法和属性都是对象。一些类型是Kotlin中内建，相当于创建的普通类，直接调用即可  
-在Kotlin源代码中，不管是常量还是变量在声明是都必须具有类型注释或者初始化。如果在声明时，进行了初始化，会自行推导其数据类型，以为着常量或者变量注释类型。Kotlin中的数据类型包括数值类型、字符类型、布尔类型等  
-字符类型不是基本数值类型，是一个独立的数据类型，字符是单引号包起来的 ‘1’ , ‘\n’ , ‘\uFF00’ ，可以通过显示转换将其转换为Int型，和数值类型一样，字符类型在空检查后会在需要的时候装箱，特性不会被装箱操作保留；布尔值只有 true 或者 false，看Boolean源码可知，其内置的操作包括not(非)、and(与)、or(或)、xor(异或)、compareTo()等  
+数字类型中不会自动转型 
+```
+val i:Int=7
+val d: Double = i.toDouble()
+```
+字符（Char）不能直接作为一个数字来处理  
+```
+val c:Char='c'
+val i: Int = c.toInt()
+```
+字面上可以写明具体的类型, 编译器会自动推断出具体的类型  
+```
+val i = 12 // An Int
+val iHex = 0x0f // 一个十六进制的Int类型
+val l = 3L // A Long
+val d = 3.5 // A Double
+val f = 3.5F // A Float
+```
+在Kotlin源代码中，不管是常量还是变量在声明是都必须具有类型注释或者初始化。如果在声明时，进行了初始化，会自行推导其数据类型，以为着常量或者变量注释类型。Kotlin中的数据类型包括数值类型、字符类型、布尔类型等   
+字符类型不是基本数值类型，是一个独立的数据类型，字符是单引号包起来的 ‘1’ , ‘\n’ , ‘\uFF00’ ，可以通过显示转换将其转换为Int型，和数值类型一样，字符类型在空检查后会在需要的时候装箱，特性不会被装箱操作保留；布尔值只有 true 或者 false，看Boolean源码可知，其内置的操作包括not(非)、and(与)、or(或)、xor(异或)、compareTo()等  
 
 `==`  
 1. 如果作用于基本数据类型的变量，则直接比较其存储的 “值”是否相等
@@ -57,7 +75,44 @@ Kotlin 依旧在发展，虽然它相对稳定，并且final release版本就很
 1. 对于基本数据类型，如果类型不同，其结果就是不等。如果同类型相比，与“==”一致，直接比较其存储的 “值”是否相等；
 2. 对于引用类型，与“==”一致，比较的是所指向的对象的地址  
 
-## 流程控制语句  
+## 常用关键字
+#### Unit 
+所有不显式声明返回类型的函数都会返回 Unit 类型, 然 Unit 经常与 Java 中的 void 相比较，两者概念也相当相似，但确实是两回事。Unit 是一个真正的类，继承自 Any 类    
+```
+fun doSomething(): Unit {
+    Log.d("Hello", "World")
+}
+```
+#### Nothing 
+是一个 空类型（uninhabited type），也就是说，程序运行时不会出现任何一个 Nothing 类型对象。Nothing 类型的函数，不用看函数体就能知道，和返回 Unit 的函数不同，这个函数不可能执行成功。Nothing 还是其他所有类型的子类型Nothing 一个只抛出了异常的函数真的有返回类型吗？它应该什么都不返回，事实上，这个函数的返回类型就是 Nothing  
+```
+fun fail(): Nothing {
+    throw RuntimeException("Something went wrong")
+}
+```
+
+#### lazy 
+用于val, 在第一次被调用时就被初始化，想要被改变只能重新定义, 用于单例模式       
+
+#### lateinit 
+用于var, 可以在任何位置初始化并且可以初始化多次, 不能用在可空的属性上和java的基本类型上, 用于只能生命周期流程中进行获取或者初始化的变量，比如 Android 的 onCreate()   
+
+#### as  
+用于类型转化  
+```
+flowLayout = activity.inflater(R.layout.common_hot) as LinearLayout
+```
+以及处理包命名冲突  
+```
+import net.mindview.simple.Vecotr
+import java.until.Vecotr as aVector
+
+val v : Vecotr = Vector()
+val vA : aVector = aVector()
+```
+
+
+## 流程控制语句  
 ```
 if (a > b) {
     max_0 = a 
