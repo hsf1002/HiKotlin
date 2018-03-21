@@ -75,7 +75,7 @@ val f = 3.5F // A Float
 1. 对于基本数据类型，如果类型不同，其结果就是不等。如果同类型相比，与“==”一致，直接比较其存储的 “值”是否相等；
 2. 对于引用类型，与“==”一致，比较的是所指向的对象的地址  
 
-## 常用关键字
+## 关键字
 #### Unit 
 所有不显式声明返回类型的函数都会返回 Unit 类型, 然 Unit 经常与 Java 中的 void 相比较，两者概念也相当相似，但确实是两回事。Unit 是一个真正的类，继承自 Any 类    
 ```
@@ -111,6 +111,97 @@ val v : Vecotr = Vector()
 val vA : aVector = aVector()
 ```
 
+## Lambda 表达式
+* 一个 Lambda 表达式可以有零个或多个参数
+* 参数的类型既可以明确声明，也可以根据上下文来推断。例如：(int a)与(a)效果相同
+* 所有参数需包含在圆括号内，参数之间用逗号相隔。例如：(a, b) 或 (int a, int b) 或 (String a, int b, float c)
+* 空圆括号代表参数集为空。例如：() -> 42
+* 当只有一个参数，且其类型可推导时，圆括号（）可省略。例如：a -> return a * a
+* Lambda 表达式的主体可包含零条或多条语句
+* 如果 Lambda 表达式的主体只有一条语句，花括号{}可省略。匿名函数的返回类型与该主体表达式一致
+* 如果 Lambda 表达式的主体包含一条以上语句，则表达式必须包含在花括号{}中（形成代码块）。匿名函数的返回类型与代码块的返回类型一致，若没有返回则为空
+
+## 内联扩展函数
+### let  
+```
+fun let()
+{
+    /*
+    * 在let中，用it表示引用对象，并可调用其方法，it不可省略。返回值是语句块的最后一行，若最后一行语句无返回值，则整个let语句块也无返回值
+    * */
+    val list: MutableList<String> = mutableListOf("A","B","C")
+    val change: Any
+
+    change = list.let {
+        it.add("D")
+        it.add("E")
+        //this.add  // no this
+        it.size     // must it.size
+    }
+    println("list = $list")         // list = [A, B, C, D, E]
+    println("change = $change")     // change = 5(change = true when delete size)
+}
+```
+### apply
+```
+fun apply()
+{
+    /*
+    * 在apply中，用this代表当前引用对象，并且调用其方法时，this可省略。apply必有返回值，且返回值是当前引用对象
+    * */
+    val list: MutableList<String> = mutableListOf("A", "B", "C")
+    val change: Any
+    change = list.apply {
+        add("D")
+        add("E")
+        this.add("F")   // equal with  add("F")
+        //it.size       // no it
+        size            // must size
+    }
+    println("list = $list")         // list = [A, B, C, D, E, F]
+    println("change = $change")     // change = [A, B, C, D, E, F]
+}
+```
+### run
+```
+fun run()
+{
+    /*
+    *  在run中，用this代表当前引用对象，并且调用其方法时，this可省略。返回值是语句块的最后一行，若最后一行语句无返回值，则整个run语句块也无返回值
+    * */
+    val list: MutableList<String> = mutableListOf("A", "B", "C")
+    val change: Any
+    change = list.run {
+        add("D")
+        add("E")
+        this.add("F")   // equal with  add("F")
+        //it.size       // no it
+        size            // must size
+    }
+    println("list = $list")         // list = [A, B, C, D, E, F]
+    println("change = $change")     // change = 6(change = true when delete size)
+}
+```
+### with
+```
+fun with()
+{
+    /*
+    *  感觉和run没什么区别，只是调用方式不一样
+    * */
+    val list: MutableList<String> = mutableListOf("A", "B", "C")
+    val change: Any
+    change = with(list) {
+        add("D")
+        add("E")
+        this.add("F")   // equal with  add("F")
+        //it.size       // no it
+        size            // must size
+    }
+    println("list = $list")         // list = [A, B, C, D, E, F]
+    println("change = $change")     // change = 6(change = true when delete size)
+}
+```
 
 ## 流程控制语句  
 ```
