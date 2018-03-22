@@ -123,6 +123,29 @@ val vA : aVector = aVector()
 
 ## 内联扩展函数
 ### let  
+let扩展函数的实际上是一个作用域函数，当你需要去定义一个变量在一个特定的作用域范围内，let函数的是一个不错的选择；let函数另一个作用就是可以避免写一些判断null的操作  
+```
+object.let{
+it.todo()//在函数体内使用it替代object对象去访问其公有的属性和方法
+...
+}
+
+//另一种用途 判断object为null的操作
+object?.let{//表示object不为null的条件下，才会去执行let函数体
+it.todo()
+}
+```
+```
+mVideoPlayer?.setVideoView(activity.course_video_view)
+    mVideoPlayer?.setControllerView(activity.course_video_controller_view)
+    mVideoPlayer?.setCurtainView(activity.course_video_curtain_view)
+
+mVideoPlayer?.let {
+       it.setVideoView(activity.course_video_view)
+       it.setControllerView(activity.course_video_controller_view)
+       it.setCurtainView(activity.course_video_curtain_view)
+}
+```
 ```
 fun let()
 {
@@ -142,7 +165,67 @@ fun let()
     println("change = $change")     // change = 5(change = true when delete size)
 }
 ```
+### also
+和let很像唯一的区别就是返回值的不一样, 一般可用于类似于apply的多个扩展函数链式调用  
+
+```
+fun also()
+{
+    /*
+    *  和let很像唯一的区别就是返回值的不一样，let是以闭包的形式返回，返回函数体内最后一行的值，如果最后一行为空就返回一个Unit类型的默认值。
+    *  而also函数返回的则是传入对象的本身
+    * */
+    val list: MutableList<String> = mutableListOf("A", "B", "C")
+    val change: Any
+    change = list.also {
+        it.add("D")
+        it.add("E")
+        it.add("F")   // must it
+        it.size       // no this, but return this
+    }
+    println("list = $list")         // list = [A, B, C, D, E, F]
+    println("change = $change")     // change = [A, B, C, D, E, F]
+}
+```
 ### apply
+从结构上来看apply函数和run函数很像，唯一不同点就是它们各自返回的值不一样, apply一般用于一个对象实例初始化的时候，需要对对象中的属性进行赋值。或者动态inflate出一个XML的View的时候需要给View绑定数据也会用到，这种情景非常常见。特别是在我们开发中会有一些数据model向View model转化实例化的过程中需要用到  
+```
+
+mSheetDialogView = View.inflate(activity, R.layout.biz_exam_plan_layout_sheet_inner, null)
+        mSheetDialogView.course_comment_tv_label.paint.isFakeBoldText = true
+        mSheetDialogView.course_comment_tv_score.paint.isFakeBoldText = true
+        mSheetDialogView.course_comment_tv_cancel.paint.isFakeBoldText = true
+        
+mSheetDialogView = View.inflate(activity, R.layout.biz_exam_plan_layout_sheet_inner, null).apply{
+   course_comment_tv_label.paint.isFakeBoldText = true
+   course_comment_tv_score.paint.isFakeBoldText = true
+   course_comment_tv_cancel.paint.isFakeBoldText = true
+}
+```
+```
+  if (mSectionMetaData == null || mSectionMetaData.questionnaire == null || mSectionMetaData.section == null) {
+            return;
+        }
+        if (mSectionMetaData.questionnaire.userProject != null) {
+            renderAnalysis();
+            return;
+        }
+        if (mSectionMetaData.section != null && !mSectionMetaData.section.sectionArticles.isEmpty()) {
+            fetchQuestionData();
+            return;
+        }
+
+// 多个非空判断的链式表达式
+mSectionMetaData?.apply{
+//mSectionMetaData不为空的时候操作mSectionMetaData
+}?.questionnaire?.apply{
+//questionnaire不为空的时候操作questionnaire
+}?.section?.apply{
+//section不为空的时候操作section
+}?.sectionArticle?.apply{
+//sectionArticle不为空的时候操作sectionArticle
+}            
+```
 ```
 fun apply()
 {
@@ -163,6 +246,25 @@ fun apply()
 }
 ```
 ### run
+是let和with两个函数的结合体,准确来说它弥补了let函数在函数体内必须使用it参数替代对象，在run函数中可以像with函数一样可以省略，直接访问实例的公有属性和方法，另一方面它弥补了with函数传入对象判空问题，在run函数中可以像let函数一样做判空处理  
+```
+override fun onBindViewHolder(holder: ViewHolder, position: Int){
+   val item = getItem(position)?: return
+   with(item){
+      holder.tvNewsTitle.text = StringUtils.trimToEmpty(titleEn)
+       holder.tvNewsSummary.text = StringUtils.trimToEmpty(summary)
+       ...   
+   }
+}
+
+override fun onBindViewHolder(holder: ViewHolder, position: Int){
+  getItem(position)?.run{
+      holder.tvNewsTitle.text = StringUtils.trimToEmpty(titleEn)
+       holder.tvNewsSummary.text = StringUtils.trimToEmpty(summary)
+       ...   
+   }
+}
+```
 ```
 fun run()
 {
@@ -183,6 +285,27 @@ fun run()
 }
 ```
 ### with
+和其他几个函数使用方式略有不同，因为它不是以扩展的形式存在的, 适用于调用同一个类的多个方法时，可以省去类名重复，直接调用类的方法即可，经常用于Android中RecyclerView中onBinderViewHolder中，数据model的属性映射到UI上  
+```
+@Override
+public void onBindViewHolder(ViewHolder holder, int position) {
+   ArticleSnippet item = getItem(position);
+        if (item == null) {
+            return;
+        }
+        holder.tvNewsTitle.setText(StringUtils.trimToEmpty(item.titleEn));
+        holder.tvNewsSummary.setText(StringUtils.trimToEmpty(item.summary
+}        
+
+override fun onBindViewHolder(holder: ViewHolder, position: Int){
+   val item = getItem(position)?: return
+   with(item){
+      holder.tvNewsTitle.text = StringUtils.trimToEmpty(titleEn)
+       holder.tvNewsSummary.text = StringUtils.trimToEmpty(summary)
+       ...   
+   }
+}
+```
 ```
 fun with()
 {
